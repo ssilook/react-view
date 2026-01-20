@@ -1,6 +1,6 @@
 import React from 'react'
 import { Calendar, Home, Inbox, MoreHorizontal, Search, Settings,
-    ChevronRight, ChevronDown
+    ChevronRight, ChevronDown, CornerDownRight, File, Wrench, Star, Space
 } from "lucide-react"
 
 import {
@@ -19,6 +19,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubItem,
   SidebarSeparator,
+  useSidebar
 } from "@/components/ui/sidebar"
 
 import {
@@ -29,25 +30,26 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible'
 
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
-import Menu1 from '@/pages/Menu1'
+/* import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import Menu1 from '@/pages/Menu1' */
 
 
 interface Menu {
     title: string;
     url?: string;
-    icon: React.ReactSVGElement
+    icon: React.ElementType;
     subMenu?: subMenu[]
 }
 
 interface subMenu {
     title: string;
     url: string;
-    icon: React.ReactSVGElement
+    icon: React.ElementType;
+    badge?: number;
 }
 
 // Menu items.
-const items = [
+const application: Menu[] = [
     {
       title: "Home",
       url: "#",
@@ -75,43 +77,59 @@ const items = [
     },
 ]
 
-const itemAndSubitem = [
+const custom: Menu[] = [
     {
-        title: "Search",
+        title: "Custom Menu",
         url: "#",
-        icon: Search,
-    },
+        icon: Wrench,
+    }
+]
+
+const sub: Menu[] = [
     {
-        title: "Settings",
-        icon: Settings,
-        subItems: [
+        title: "Sub Menu",
+        url: "#",
+        icon: CornerDownRight,
+        subMenu: [
             {
                 title: "Sub1",
                 url: "#",
-                icon: Settings,
+                icon: File,
+                badge: 3
             },
             {
                 title: "Sub2",
                 url: "#",
-                icon: Settings,
+                icon: File,
+                badge: 11
             }
         ]
-    },
+    }
 ]
 
 function Left() {
     const [isOpen, setIsOpen] = React.useState(false)
+    const { open } = useSidebar()
     return (
         <Sidebar collapsible='icon'>
-            <SidebarHeader>
-                Sidebar Header
+            <SidebarHeader className='text-center'>
+                {open
+                    ? <>
+                        <span className='flex justify-center items-center space-x-4 m-4'>
+                            <Star size={30} />
+                            <span>
+                                Header
+                            </span>
+                        </span>
+                      </>
+                    : <span className='flex justify-center items-center mt-1'><Star size={30}/> </span>}
             </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>
                 <SidebarGroupLabel>Application</SidebarGroupLabel>
                 <SidebarGroupContent>
                     <SidebarMenu>
-                    {items.map((item) => (
+                    {application.map((item) => (
                         <SidebarMenuItem key={item.title}>
                         <SidebarMenuButton asChild>
                             <a href={item.url}>
@@ -119,7 +137,6 @@ function Left() {
                                 <span>{item.title}</span>
                             </a>
                         </SidebarMenuButton>
-                        <SidebarMenuBadge>24</SidebarMenuBadge>
                         </SidebarMenuItem>
                     ))}
                     </SidebarMenu>
@@ -128,101 +145,45 @@ function Left() {
                 <SidebarGroup>
                     <SidebarGroupLabel>Custom</SidebarGroupLabel>
                     <SidebarGroupContent>
-                        <SidebarMenu>
-                            <SidebarMenuItem key={'Custom Menu'}>
-                                <SidebarMenuButton asChild>
-                                    <a href={'#'}>
-                                        <Settings />
-                                        <span>Custom Menu</span>
-                                    </a>
-                                </SidebarMenuButton>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <SidebarMenuAction asChild>
-                                            <MoreHorizontal className='cursor-pointer' />
-                                        </SidebarMenuAction>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent side="right" align="start">
-                                        <DropdownMenuItem>
-                                            <span>Edit Project</span>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem>
-                                            <span>Delete Project</span>
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </SidebarMenuItem>
-                        </SidebarMenu>
+                        {custom.map((item) => (
+                            <SidebarMenu key={item.title}>
+                                <SidebarMenuItem>
+                                    <SidebarMenuButton asChild>
+                                        <a href={item.url}>
+                                            <item.icon />
+                                            <span>{item.title}</span>
+                                        </a>
+                                    </SidebarMenuButton>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <SidebarMenuAction asChild>
+                                                <MoreHorizontal className='cursor-pointer' />
+                                            </SidebarMenuAction>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent side="right" align="start">
+                                            <DropdownMenuItem>
+                                                <span>Edit Project</span>
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem>
+                                                <span>Delete Project</span>
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </SidebarMenuItem>
+                            </SidebarMenu>
+                        ))}
                     </SidebarGroupContent>
                 </SidebarGroup>
                 <SidebarGroup>
                     <SidebarGroupLabel>Sub</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
-                            <Collapsible
-                                className="group/collapsible"
-                                open={isOpen}
-                                onOpenChange={setIsOpen}
-                            >
-                                <SidebarMenuItem>
-                                    <CollapsibleTrigger asChild>
-                                        <SidebarMenuButton asChild>
-                                            <a href={'#'}>
-                                                <Settings />
-                                                <span>Sub Menu</span>
-                                                <SidebarMenuBadge>
-                                                    {isOpen ? 
-                                                        <ChevronDown size='sm' /> : <ChevronRight size='sm' />
-                                                    }
-                                                </SidebarMenuBadge>
-                                            </a>
-                                        </SidebarMenuButton>
-                                    </CollapsibleTrigger>
-                                    <CollapsibleContent>
-                                        <SidebarMenuSub>
-                                            <SidebarMenuSubItem>
-                                                <SidebarMenuButton asChild>
-                                                    <a href={'#'}>
-                                                        <Settings />
-                                                        <span>Sub1</span>
-                                                    </a>
-                                                </SidebarMenuButton>
-                                            </SidebarMenuSubItem>
-                                            <SidebarMenuSubItem>
-                                                <SidebarMenuButton asChild>
-                                                    <a href={'#'}>
-                                                        <Settings />
-                                                        <span>Sub2</span>
-                                                    </a>
-                                                </SidebarMenuButton>
-                                            </SidebarMenuSubItem>
-                                        </SidebarMenuSub>
-                                    </CollapsibleContent>
-                                </SidebarMenuItem>
-                            </Collapsible>
-                        </SidebarMenu>
-                    </SidebarGroupContent>
-                </SidebarGroup>
-                {/* <SidebarGroup>
-                    <SidebarGroupLabel>Sub</SidebarGroupLabel>
-                    <SidebarGroupContent>
-                        <SidebarMenu>
-                            {itemAndSubitem.map(menu => (
-                                !menu.subItems ? 
-                                <SidebarMenuItem key={menu.title}>
-                                    <SidebarMenuButton asChild>
-                                        <a href={menu.url}>
-                                            <menu.icon />
-                                            <span>{menu.title}</span>
-                                        </a>
-                                    </SidebarMenuButton>
-                                    <SidebarMenuBadge>24</SidebarMenuBadge>
-                                </SidebarMenuItem>
-                                :
+                            {sub.map((menu) => (
                                 <Collapsible
                                     className="group/collapsible"
                                     open={isOpen}
                                     onOpenChange={setIsOpen}
+                                    key={menu.title}
                                 >
                                     <SidebarMenuItem>
                                         <CollapsibleTrigger asChild>
@@ -232,7 +193,7 @@ function Left() {
                                                     <span>{menu.title}</span>
                                                     <SidebarMenuBadge>
                                                         {isOpen ? 
-                                                            <ChevronDown size='sm' /> : <ChevronRight size='sm' />
+                                                            <ChevronDown size="16px" /> : <ChevronRight size="16px" />
                                                         }
                                                     </SidebarMenuBadge>
                                                 </a>
@@ -240,14 +201,15 @@ function Left() {
                                         </CollapsibleTrigger>
                                         <CollapsibleContent>
                                             <SidebarMenuSub>
-                                                {menu.subItems.maps(subMenu => (
-                                                    <SidebarMenuSubItem>
+                                                {menu.subMenu!.map((subMenu) => (
+                                                    <SidebarMenuSubItem key={subMenu.title}>
                                                         <SidebarMenuButton asChild>
                                                             <a href={subMenu.url}>
                                                                 <subMenu.icon />
                                                                 <span>{subMenu.title}</span>
                                                             </a>
                                                         </SidebarMenuButton>
+                                                        <SidebarMenuBadge>{subMenu.badge}</SidebarMenuBadge>
                                                     </SidebarMenuSubItem>
                                                 ))}
                                             </SidebarMenuSub>
@@ -257,10 +219,18 @@ function Left() {
                             ))}
                         </SidebarMenu>
                     </SidebarGroupContent>
-                </SidebarGroup> */}
+                </SidebarGroup>
             </SidebarContent>
-            <SidebarFooter>
-                    Sidebar Footer
+            <SidebarFooter className='text-center'>
+                {open
+                    ? <>
+                        <span className='flex justify-center items-center'>
+                            <span>
+                                Footer
+                            </span>
+                        </span>
+                      </>
+                    : <span className='flex justify-center items-center mb-1'><Space size={16}/> </span>}
             </SidebarFooter>
             <SidebarSeparator />
         </Sidebar>

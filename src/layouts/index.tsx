@@ -2,20 +2,16 @@ import React from 'react'
 import Header from './Header'
 import Left from './Left'
 import Container from './Container'
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import { ModeToggle } from "@/components/mode-toggle"
-
-function layouts({children} : {children: React.ReactNode}) {
+import { SidebarProvider } from "@/components/ui/sidebar"
+function layouts(/* {children} : {children: React.ReactNode} */) {
     return (
         <>
-            <Header></Header>
-            <ModeToggle></ModeToggle>
             <SidebarProvider>
                 <Left></Left>
-                <main>
-                    <SidebarTrigger>
-                        {children}
-                    </SidebarTrigger>
+                <main className="w-full">
+                    <Header>
+                        {/* {children} */}
+                    </Header>
                     <Container></Container>
                 </main>
             </SidebarProvider>

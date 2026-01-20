@@ -9,7 +9,7 @@ function App() {
     <>
       {/* <Reset></Reset> */}
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-        <Layouts children={undefined}></Layouts>
+        <Layouts></Layouts>
       </ThemeProvider>
     </>
   )

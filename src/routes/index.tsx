@@ -1,48 +1,35 @@
-import { Routes, Route } from 'react-router-dom';
-import { RouteConfig } from './types';
-import Main from '../pages/Main';
-import Menu1 from '../pages/Menu1';
+import { Navigate, createBrowserRouter, RouterProvider } from 'react-router-dom';
+import Layouts from '@/layouts';
 
-const routes: RouteConfig[] = [
+import Home from '@/pages/Home';
+import Inbox from '@/pages/Inbox';
+import Calendar from '@/pages/Calendar';
+import Search from '@/pages/Search';
+import Settings from '@/pages/Settings';
+import Custom from '@/pages/Custom';
+import Sub1 from '@/pages/Sub1';
+import Sub2 from '@/pages/Sub2';
+import NotFound from '@/pages/error/NotFound';
+
+const router = createBrowserRouter([
   {
     path: '/',
-    component: Main,
-    exact: true,
+    element: <Layouts />, // Layouts가 Outlet을 포함
+    children: [
+      { index: true, element: <Navigate to="/home" replace /> },
+      { path: 'home', element: <Home /> },
+      { path: 'inbox', element: <Inbox /> },
+      { path: 'calendar', element: <Calendar /> },
+      { path: 'search', element: <Search /> },
+      { path: 'settings', element: <Settings /> },
+      { path: 'custom', element: <Custom /> },
+      { path: 'sub1', element: <Sub1 /> },
+      { path: 'sub2', element: <Sub2 /> },
+      { path: '*', element: <NotFound /> },
+    ],
   },
-  {
-    path: '/menu1',
-    component: Menu1,
-  },
-  /* {
-    path: '*',
-    component: NotFound,
-  }, */
-];
+]);
 
-
-
-const Router = () => {
-  return (
-    <Routes>
-      {routes.map((route) => (
-        <Route
-          key={route.path}
-          path={route.path}
-          element={<route.component />}
-          /* exact={route.exact} */
-        />
-      ))}
-      <Route path="/users" element={<Users />} />
-      <Route path="/users/:id" element={<UserDetail />} />
-      <Route path="/demo" element={<CardDemo />} />
-      {/* <Route path="/" element={<Home />} />
-      <Route path="/secondPage" element={<SecondPage />} />
-      <Route path="/thirdPage" element={<ThirdPage />} /> */}
-      {/* <Route path="/users/:id" element={<UserDetail />} /> */}
-    </Routes>
-    
-  
-  );
-};
-
-export default Router;
+export default function Router () {
+  return <RouterProvider router={router} />
+}

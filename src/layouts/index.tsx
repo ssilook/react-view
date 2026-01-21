@@ -1,18 +1,15 @@
-import React from 'react'
 import Header from './Header'
 import Left from './Left'
 import Container from './Container'
 import { SidebarProvider } from "@/components/ui/sidebar"
-function layouts(/* {children} : {children: React.ReactNode} */) {
+function layouts() {
     return (
         <>
             <SidebarProvider>
-                <Left></Left>
-                <main className="w-full">
-                    <Header>
-                        {/* {children} */}
-                    </Header>
-                    <Container></Container>
+                <Left />
+                <main className="flex-1 min-h-screen overflow-auto">
+                    <Header />
+                    <Container />
                 </main>
             </SidebarProvider>
 

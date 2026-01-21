@@ -14,7 +14,7 @@ import { ModeToggle } from "@/components/mode-toggle"
 function Header() {
   return (
     <>
-      <div className="flex w-full px-4 py-2 border-b space-x-4">
+      <div className="px-4 py-2 border-b space-x-4">
         <SidebarTrigger />
         {/* <SidebarTrigger>
             {children}

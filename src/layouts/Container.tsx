@@ -1,13 +1,17 @@
-import { useState } from 'react'
+/* import { useState } from 'react'
 import reactLogo from '@/assets/react.svg'
 import viteLogo from '../../public/vite.svg'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/button' */
+import { Outlet } from 'react-router-dom'
 
 function Container() {
-    const [count, setCount] = useState(0)
+    // const [count, setCount] = useState(0)
     return (
         <>
-            <div className="m-4 text-center space-y-10">
+            <div className='p-4'>
+                <Outlet />
+            </div>
+            {/* <div className="m-4 text-center space-y-10">
                 <div className='flex justify-center left-255'>
                     <a href="https://vite.dev" target="_blank">
                         <img src={viteLogo} className="logo" alt="Vite logo" />
@@ -28,7 +32,7 @@ function Container() {
                 <p className="read-the-docs">
                 Click on the Vite and React logos to learn more
                 </p>
-            </div>
+            </div> */}
         </>
     )
 }

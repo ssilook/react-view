@@ -2,6 +2,7 @@ import React from 'react'
 import { Calendar, Home, Inbox, MoreHorizontal, Search, Settings,
     ChevronRight, ChevronDown, CornerDownRight, File, Wrench, Star, Space
 } from "lucide-react"
+import { NavLink } from 'react-router-dom';
 
 import {
   Sidebar,
@@ -36,7 +37,7 @@ import Menu1 from '@/pages/Menu1' */
 
 interface Menu {
     title: string;
-    url?: string;
+    url: string;
     icon: React.ElementType;
     subMenu?: subMenu[]
 }
@@ -52,27 +53,27 @@ interface subMenu {
 const application: Menu[] = [
     {
       title: "Home",
-      url: "#",
+      url: "/home",
       icon: Home,
     },
     {
       title: "Inbox",
-      url: "#",
+      url: "/inbox",
       icon: Inbox,
     },
     {
       title: "Calendar",
-      url: "#",
+      url: "/calendar",
       icon: Calendar,
     },
     {
       title: "Search",
-      url: "#",
+      url: "/search",
       icon: Search,
     },
     {
       title: "Settings",
-      url: "#",
+      url: "/settings",
       icon: Settings,
     },
 ]
@@ -80,7 +81,7 @@ const application: Menu[] = [
 const custom: Menu[] = [
     {
         title: "Custom Menu",
-        url: "#",
+        url: "/custom",
         icon: Wrench,
     }
 ]
@@ -88,18 +89,18 @@ const custom: Menu[] = [
 const sub: Menu[] = [
     {
         title: "Sub Menu",
-        url: "#",
+        url: "/sub1",
         icon: CornerDownRight,
         subMenu: [
             {
                 title: "Sub1",
-                url: "#",
+                url: "/sub1",
                 icon: File,
                 badge: 3
             },
             {
                 title: "Sub2",
-                url: "#",
+                url: "/sub2",
                 icon: File,
                 badge: 11
             }
@@ -112,7 +113,7 @@ function Left() {
     const { open } = useSidebar()
     return (
         <Sidebar collapsible='icon'>
-            <SidebarHeader className='text-center'>
+            <SidebarHeader className= {open ? 'text-center' : 'text-center border-b'}>
                 {open
                     ? <>
                         <span className='flex justify-center items-center space-x-4 m-4'>
@@ -122,7 +123,7 @@ function Left() {
                             </span>
                         </span>
                       </>
-                    : <span className='flex justify-center items-center mt-1'><Star size={30}/> </span>}
+                    : <span className='flex justify-center items-center mt-1'><Star size={32}/> </span>}
             </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>
@@ -132,10 +133,10 @@ function Left() {
                     {application.map((item) => (
                         <SidebarMenuItem key={item.title}>
                         <SidebarMenuButton asChild>
-                            <a href={item.url}>
+                            <NavLink to={item.url}>
                                 <item.icon />
                                 <span>{item.title}</span>
-                            </a>
+                            </NavLink>
                         </SidebarMenuButton>
                         </SidebarMenuItem>
                     ))}
@@ -149,10 +150,10 @@ function Left() {
                             <SidebarMenu key={item.title}>
                                 <SidebarMenuItem>
                                     <SidebarMenuButton asChild>
-                                        <a href={item.url}>
+                                        <NavLink to={item.url}>
                                             <item.icon />
                                             <span>{item.title}</span>
-                                        </a>
+                                        </NavLink>
                                     </SidebarMenuButton>
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
@@ -188,7 +189,7 @@ function Left() {
                                     <SidebarMenuItem>
                                         <CollapsibleTrigger asChild>
                                             <SidebarMenuButton asChild>
-                                                <a href={'#'}>
+                                                <NavLink to={menu.url!}>
                                                     <menu.icon />
                                                     <span>{menu.title}</span>
                                                     <SidebarMenuBadge>
@@ -196,7 +197,7 @@ function Left() {
                                                             <ChevronDown size="16px" /> : <ChevronRight size="16px" />
                                                         }
                                                     </SidebarMenuBadge>
-                                                </a>
+                                                </NavLink>
                                             </SidebarMenuButton>
                                         </CollapsibleTrigger>
                                         <CollapsibleContent>
@@ -204,10 +205,10 @@ function Left() {
                                                 {menu.subMenu!.map((subMenu) => (
                                                     <SidebarMenuSubItem key={subMenu.title}>
                                                         <SidebarMenuButton asChild>
-                                                            <a href={subMenu.url}>
+                                                            <NavLink to={subMenu.url}>
                                                                 <subMenu.icon />
                                                                 <span>{subMenu.title}</span>
-                                                            </a>
+                                                            </NavLink>
                                                         </SidebarMenuButton>
                                                         <SidebarMenuBadge>{subMenu.badge}</SidebarMenuBadge>
                                                     </SidebarMenuSubItem>
